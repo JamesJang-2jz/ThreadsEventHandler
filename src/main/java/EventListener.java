@@ -17,13 +17,17 @@ public class EventListener extends Thread{
     }
 
     public void run() {
-        while (readyToQuit()){
-
+        while (!readyToQuit()){
+            if (shouldReply()){
+                reply();
+                eventTracker.handle(messageToListenFor, () -> {System.out.println(messageToReplyWith);
+                });
+            }
         }
     }
 
     public Boolean readyToQuit() {
-        return null;
+        return eventTracker.has("quit");
     }
 
     public Boolean shouldReply() {
@@ -32,5 +36,8 @@ public class EventListener extends Thread{
     }
 
     public void reply() {
+        eventTracker.handle(messageToListenFor, () -> {
+            System.out.println(messageToReplyWith);
+        });
     }
 }
